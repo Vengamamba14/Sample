@@ -1,0 +1,518 @@
+1.git --version
+
+2. git config --global user.name "Vengamamba14"
+   git config --global user.email "pachavengamamba@gmail.com"
+   git config --list
+
+3.git help <verb>  (or)
+  git <verb> --help
+
+  git help config
+  git config --help
+
+4.local repository tracking using git. This is first way
+   cd Local repository
+   ls -la
+   git init
+   ls -la
+   
+
+  if you do not want to track local repository with git. To remove .git use below command
+
+  rm -rf .git
+  ls -la
+
+5.git status
+
+6.In my local git repository I have my personal password when I typed git status, the command showed that file to me.
+I do not want to share that information with my project mates so i will use git ignore file.
+
+touch .gitignore
+
+gitignore is a text file. If you keep some data in it then git will ignore those files.
+
+Now run git status command 
+
+it will list .gitignore instead of your personeldata
+
+
+7.git add filename 
+
+   or
+
+  git add -A
+  -A command will add all the modified files to staging area.
+
+
+8.git reset cal.py
+  then it will be in working directoty rather than staging area  (working directory - staging area - remote repository)
+
+  if you want to move back all the files to working directory run below command
+
+  git reset
+
+
+9. git add -A
+   git status
+   git commit -m "initial commit"
+
+10.git log
+
+11.cloning remote repo
+
+mkdir GitProjects
+cd GitProjects     then
+git clone "URL of project"  (or)
+
+
+git clone "URL of project "  "where to place > path of directory"
+
+
+12.Viewing information about remote repository
+
+git remote -v
+
+or 
+
+git branch -a
+
+
+13. push changes to remote repo
+
+change already existing file
+
+git diff
+git status
+git add -A
+git status
+git commit -m "Done changes to intial commit"
+git pull origin master
+git push origin master
+
+
+14. push branch to remote repository
+
+git push -u origin branchname
+git branch -a
+
+
+15. Merge a branch
+
+git checkout master
+
+git pull origin master
+
+git branch --merged
+
+git merge cal-divide
+
+git push origin master
+
+
+16. Deleting a branch
+
+git branch --merged
+
+git branch -d cal-divide (locally delete branch)
+
+git branch -a
+
+git push origin --delete cal-divide (remotely delete branch)
+
+git branch -a
+
+
+17. In Working Directory in onefile do somechanges.but you want only previous changes(first how the file is) then
+git status
+git diff
+
+git checkout another-branch
+git status
+git diff
+
+do somechanges in same file that you want commit
+git status
+git add -A
+git status
+
+
+18.Bad commit messge(continuous steps to 17)
+
+now do git commit but I have given wrong commit messge 
+
+git commit -m "add function is modified"
+
+but I have to give commit message as " substract fun is modified"
+
+git commit -m "substract function is modified"
+
+git log
+
+now how to modify this commit message without making another commit
+
+git commit --amend -m "substract function is modified"
+
+git log
+
+It will show same commit id with modified commit message.
+
+but the hashkey is changed because we changed commit message.
+thats y git history is also changed.
+we should not change git history it will cause problem to other dvelopers
+later will see we can make corrections without changing git history
+
+
+
+19.For suppose we accidently left out some file that we want to commit then (git stat command)
+
+I have to create .gitignore file and add that file to gitignore 
+
+Now I have to commit this .gitignore file to my last commit without changing commitid but git history will change
+
+touch .gitignore
+add file to .gitignore by copying in that .gitignore file
+git status
+git add .gitignore
+
+git commit --amend
+
+commit console will display do not do ant changes :wq
+
+git log
+
+git log --stat (This command will show the files that were changed within the commit)
+
+now .gitignore file now part of last commit
+
+20.Common mistakes to commit to wrong branch
+
+I have to do changes in substact branch and I have to commit those changes to substract branch
+but my mistake I am doing all changes and commits in master branch
+
+Now our goal is move last commit from master branch to substract barnch and delete last commit from master branch for this we are using
+
+cherry-pick command
+
+cherry-pick crates new commit based on original(last commit)
+
+
+git log 
+and copy first 8 digits of latest commit
+
+git checkout substract
+git log(we have only one commit and now we have to copy another commit here)
+git cherry-pick hashkey(8 digits)
+git log (Now we can see 2 commits)
+
+but still we have those commit on master branch also because cherry-pick does not delete that commit from master branch
+
+
+21.git reset (continue to 20)
+
+git checkout master
+git log
+
+There are 3 different types of reset 
+1.git reset soft
+2.git reset mixed (which is default)
+3.git reset hard
+
+I want to go back to intial commit so I am grabbing first 8 digits of initial commit 
+
+a) git reset --soft hashkey
+   git log (Now we have only intial commit the latest commit is deleted)
+   git status
+
+Now in staging area we have the files regarding latest commit.
+
+soft will reset to the commit Id we specified but it will keep changes in staging area so we did not lose our data (-> commit)
+
+
+b)mixed
+
+git reset hashkey  (No need to mention --mixed because it is default)
+git log (Now we have only intial commit the latest commit is deleted)
+git status
+
+soft will reset to the commit Id we specified but it will keep changes in working area so we did not lose our data (-> add , commit)
+ 
+
+c) git reset --hard hashkey
+   git log (Now we have only intial commit the latest commit is deleted)
+   git status
+
+hard will delete the files permantely we have to be careful is git hard.
+
+but .gitignore file is present.
+
+git reset hard reverts all the tracked files back to the state they were but leaves any untracked files alone(like .gitignore)
+
+To get rid of untracked file use below command
+
+git clean -df                  (d- untracked directory and f-untracked file)
+
+git status        (working directory is clean)
+
+
+21.If you use git reset hard it will permentatly delete all the files. But you want those files back then
+
+if it is not more than 30 days we can collect those by using git reflog.
+
+git reflog  (it will show log history)
+
+Now I will collect hashkey before reset and 
+
+git checkout hashkey
+
+git log  (Now we are in a deatched head state(these changes will go after some days) and to save these changes make a branch from it 
+
+git branch backup
+
+git branch 
+
+git checkout master
+
+git branch 
+
+theose changes that we thought we lost are in backup branch just check to confirm 
+
+git checkout backup
+
+git log
+
+so git reflog is a life saver if we thought we had lost some critical files that really didn't mean to delete or you accidently did reset.
+
+
+
+22. we should not change git history if other people pulled those changes already
+
+If you are in a situation you really undo some commits but other people already pulled those changes then we have to use git revert.
+
+revert creates new commit to reverse the effect of some earlier commits. so this way do not rewrite the history
+
+git revert will not modify or delete existing commits and it's going to create new commit on top of those that completely undo all of those changes so our history will not change
+
+
+git log
+
+I have 2 logs intial and substraction and I want to undo substract but other people pulled it 
+
+Then I will copy hashkey of substract 
+
+git revert hashkey (revert console is diplayed > do not do any modifications > :wq)
+
+git log (It will show 3 commits revert commit , substract commit , initial commit)
+
+open your cal.py (It will show intial file)
+
+
+git log
+
+git diff substract-hashkey  revert-hashkey 
+
+
+whenever you push these changes and somebody else pulls those changes their history not going to be corrupted because all of this history is same and all they are going to get is new commit(only revert commit not substract and intial commit)
+
+
+
+23.
+   git branch add
+   git checkout add
+   gedit cal.py  (Do some changes)
+   git diff
+   git stash save "worked on add function"
+   git diff
+   git status
+   gedit cal.py
+   git stash list
+   git stash apply stash@{0}  (It will show modified file)
+   git stash list  (Still we have stash id we have to delete it using pop command)
+   git checkout -- .
+   gedit cal.py  (It will show first file instead of stash file changes we have done)
+   git stash list (It will show stash id)
+
+How to delete git stash ID :
+
+   git stash pop  (It will delete top stash id and shows cal.py with stash changes i.e latest changes instead of old one)
+   git stash list (It will not show any stash id)
+   gedit cal.py  (It will show latest changes we have done i.e stash file changes it will show)
+   git diff
+
+
+modify cal.py file and save
+   git diff
+   git stash save "cal-functions" 
+   git stash list
+   gedit cal.py (It will give original file)
+   now add square function because someone asked to add thats y we are adding.
+    
+   git diff
+   git stash save "added square function"
+   git stash list
+   git stash pop (square function will go)
+   git diff
+   git stash list
+   git stash save "added square function"
+   git stash list
+   
+  Now we do not want "added square function" we have to drop it then
+   git stash drop stash@{0}          (top stash id)
+   gedit cal.py
+   git stash list
+
+ Do some changes in cal.py i.e add cal function again.
+
+   git stash save "square function added"
+   git stash list
+
+Now if you want get rid of all stashes and you want to go back to intial stage then 
+
+  git stash clear
+  git stash list (we do not have any stash list)
+  gedit cal.py
+
+
+when git stash is useful 
+
+  you are on master branch
+
+  gedit cal.py  (in add fun change line as return a+b)
+
+  git status
+  git diff 
+
+ Now you want commit these changes in add branch instead of master branch then create git stash and keep these changes.
+
+  git stash save "add function changed"
+  git status (working directory clean)
+  git checkout add
+  git stash pop (it will add recent add function changes here)
+  git diff
+  git add .
+  git commit -m "add function changes are done"
+
+
+Different forms of git add (git add -A , git add . , git add -u )  
+                                                                     
+
+git status 
+
+It will show status of working directory  :
+
+For suppose we have 
+
+a file that is deleted from  our repository
+
+we have a modified file
+
+we have deleted a file from sub directory
+
+we have modified a file within sub directory 
+ 
+
+untracked files 
+
+also we have .gitignore file
+
+we have a new file in a directory and we have new file in sub directory.
+
+
+a)  git add -A   or  git add --all
+
+    git status
+ 
+   The git add -A command going to change all of the changes (all the modified , deleted , new files and dot files) in working dirctory
+
+
+   Now to unstage changes use 
+
+   git reset
+
+   git status (It will show all files files as before)
+
+  Now go to sub directory and run git add -A
+   
+   cd sub-dir
+   
+   git add -A
+
+   It will stage(add )all the modified , deleted , new files and dot files ) even though some were in parent directory(one dir up).
+
+   git reset
+   git status
+
+   cd ..
+   
+   Now give 
+
+  git add -A sub-dir/  (if you want to add changes in that sub directory not top level dir changes)
+
+  git status
+
+  Then it will show added changes (modified and deleted file to staging area) and it will not add modified and deleted and .dot files in parent dir to the staging area.
+
+  git add -A is default one. So I need to mention like git add -A subdir/  
+
+
+  you just mention like git add subdir/ (git add -A subdir/) both are same.
+
+
+  if you do not save deleted files in subdirectory 
+
+  git reset
+  
+  git status
+
+  git add --no-all sub-dir/ (git add -A --no-all sub-dir/)
+
+  The above command will stage only modified and new files in the sub directory and it will not stage deleted files.
+
+  git status
+
+  git reset 
+
+  git status
+
+
+
+
+  b) git add -u (or)  git add --update
+
+    The command will add all modified and deleted files but it will not add any untracked files(not saved) (new files , .gitignore files in the directory) for entire working directory(parent & sub )
+
+   git status
+
+   if you specify git add -u my-dir/
+
+   git status
+
+   This command will add only all modified and deleted files only sub-dir (It will not add new files in the sub directory and it will not add new files, modified files and untracked files(.gitignore file) in parent directory also)
+
+    git reset
+    
+    git status
+
+
+
+  c) git add . (It is same as git add -A .)
+   The git add -A . command going to change all of the changes (all the modified , deleted , new files and dot files) in working dirctory
+
+  . means current directory 
+  -A is default for git add
+
+  but git add . is different for sub directory
+
+   git status
+
+   git reset 
+   
+   git status
+
+   cd sub-dir/
+
+   git add . (git add -A .)
+
+   git status
+
+  The git add . (in sub directory) will add modified, new files and delected files of sub dir to the staging area but it will not add modified, deleted,untracked (new files and .gitignore files) of parent directory
+
